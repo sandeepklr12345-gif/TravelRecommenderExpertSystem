@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Travel Destination Recommender</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f8ff;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        form {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 500px;
+            margin: auto;
+            box-shadow: 0px 0px 10px #aaa;
+        }
+        label, select, button {
+            display: block;
+            margin-top: 15px;
+            width: 100%;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px;
+            background-color: #0077cc;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        #result {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 20px;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h1>Travel Destination Recommender</h1>
+    <form id="recommendationForm">
+        <label>Budget:</label>
+        <select id="budget">
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+        </select>
+
+        <label>Preferred Climate:</label>
+        <select id="climate">
+            <option value="cold">Cold</option>
+            <option value="moderate">Moderate</option>
+            <option value="hot">Hot</option>
+        </select>
+
+        <label>Type of Place:</label>
+        <select id="placeType">
+            <option value="beach">Beach</option>
+            <option value="mountain">Mountain</option>
+            <option value="historical">Historical</option>
+            <option value="wildlife">Wildlife</option>
+        </select>
+
+        <button type="button" onclick="getRecommendation()">Get Recommendation</button>
+    </form>
+
+    <h2 id="result"></h2>
+
+    <script>
+        function getRecommendation() {
+            const budget = document.getElementById('budget').value;
+            const climate = document.getElementById('climate').value;
+            const placeType = document.getElementById('placeType').value;
+
+            fetch('http://127.0.0.1:8000/recommend', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    budget: budget,
+                    climate: climate,
+                    place_type: placeType
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerText =
+                    "Recommended Destination: " + data.destination;
+            });
+        }
+    </script>
+</body>
+</html>
